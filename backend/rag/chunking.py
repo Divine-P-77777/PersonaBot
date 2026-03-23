@@ -1,15 +1,18 @@
-"""
-Text chunking logic.
-Splits documents into overlapping chunks for embedding.
-"""
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from backend.core.config import get_settings
 
+settings = get_settings()
 
-# TODO: Month 2 implementation
+
 def chunk_text(text: str, chunk_size: int = None, chunk_overlap: int = None) -> list[str]:
-    """Split text into overlapping chunks."""
-    settings = get_settings()
+    """Split text into overlapping chunks using RecursiveCharacterTextSplitter."""
     chunk_size = chunk_size or settings.CHUNK_SIZE
     chunk_overlap = chunk_overlap or settings.CHUNK_OVERLAP
-    # TODO: Implement token-based chunking
-    return []
+
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        length_function=len,
+        is_separator_regex=False,
+    )
+    return splitter.split_text(text)
